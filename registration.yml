@@ -1,0 +1,10 @@
+---
+- name: register the host to the Red Hat Network
+  remote_user: devops
+  vars:
+    hosts_active: dbnodes
+  hosts: "{{ hosts_active }}"
+  become: True
+  vars:
+  roles:
+    - { role: registration } 

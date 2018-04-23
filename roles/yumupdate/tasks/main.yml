@@ -1,0 +1,41 @@
+---
+- name: current repositories disabled
+#  hosts: "{{ inventory_hostname }}"
+  shell: 
+    subscription-manager repos --disable=*
+
+- name: proper depositories enabled
+  become: True
+  shell:
+    subscription-manager repos --enable={{ item }}
+  with_items:
+    - rhel-7-server-rpms
+    - rhel-7-server-extras-rpms
+
+- name: upgrade all packages
+#  host: "{{ inventory_hostname }}"
+  become: True
+  yum:
+    name: '*'
+    state: latest
+  ignore_errors: yes
+
+- name: reboot if kernel is changed
+  shell: sleep 2 && shutdown -r now "Rebooting from a playbook"
+  async: 1
+  poll: 0
+  become: True
+  ignore_errors: yes
+
+- name: waiting for a machine to complete reboot
+  become: False
+  delegate_to: localhost  
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    state: started
+    delay: 30
+    timeout: 300
+    port: 22
+    search_regex: OpenSSH
+- name: declare success
+  debug: msg="This thing worked!"

@@ -1,0 +1,16 @@
+---
+- name: mariadb installed on dbnodes
+  hosts: dbnodes
+  vars:
+    maria-pkgs:
+      - MariaDB-server
+      - MariaDB-client
+  tasks:
+    - name: MariaDB packages installed
+      yum:
+        pkg: "{{ maria-pkgs }}"
+        state: installed
+    - name: database started
+      service:
+      
+      

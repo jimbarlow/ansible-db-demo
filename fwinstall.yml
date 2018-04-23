@@ -1,0 +1,8 @@
+---
+- name: install the firewall service
+  hosts: ipa_host
+  remote_user: devops
+  become: True
+  vars:
+  roles:
+    - fwinstall 

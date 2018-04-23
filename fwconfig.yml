@@ -1,0 +1,8 @@
+---
+- name: configure the firewall service
+  hosts: all
+  remote_user: devops
+  become: True
+  vars:
+  roles:
+    - fwconfig
