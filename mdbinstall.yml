@@ -1,16 +1,53 @@
 ---
 - name: mariadb installed on dbnodes
-  hosts: dbnodes
+  become: yes
+  remote_user: devops
   vars:
-    maria-pkgs:
-      - MariaDB-server
-      - MariaDB-client
+    maria_pkgs:
+      - mariadb
+      - mariadb-server
+    mysql_root_password: RedHat123!
+  hosts: "{{ active_nodes }}" 
   tasks:
-    - name: MariaDB packages installed
-      yum:
-        pkg: "{{ maria-pkgs }}"
-        state: installed
-    - name: database started
-      service:
-      
-      
+   - debug: 
+       var:
+         maria_pkgs
+   - name: MariaDB installed
+     yum:
+       pkg: "{{ maria_pkgs }}"
+       state: installed
+   - name: Libraries Installed
+     yum: 
+       pkg: MySQL-python 
+       state: latest
+   - name: database started
+     service: 
+       name: mariadb
+       state: started 
+       enabled: true
+
+   - name: root password set
+     mysql_user:
+       name: root
+       host: "{{ item }}"
+       password: "{{ mysql_root_password }}"
+       login_user: root
+       login_password: "{{ mysql_root_password }}"
+       check_implicit_admin: yes
+       priv: '*.*:ALL,GRANT'
+     with_items:
+       - "{{ inventory_hostname }}"
+       - 127.0.0.1
+       - ::1
+       - localhost
+       - name: Copy the root credentials as .my.cnf file
+   - name: template used for database user
+     template: 
+       src: templates/root.cnf.j2 
+       dest: ~/.my.cnf mode=0600
+   - name: Test Database Created
+     mysql_db: 
+       name: testdb 
+       state: present 
+       login_user: root 
+       login_password: "{{ mysql_root_password }}"

@@ -1,0 +1,16 @@
+---
+- name: play with cluster
+  vars:
+    active_hosts: dbnodes
+  remote_user: devops
+  become: true
+  hosts: "{{ active_hosts }}"
+  tasks:
+    - name: what is the status
+      mysql_replication:
+        mode: getmaster 
+        login_host: "{{ inventory_hostname }}"
+        login_password: RedHat123!
+        login_user: root
+      register: replicout
+    - debug: var=replicout
