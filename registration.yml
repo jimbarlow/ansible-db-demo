@@ -5,6 +5,5 @@
     hosts_active: dbnodes
   hosts: "{{ hosts_active }}"
   become: True
-  vars:
   roles:
     - { role: registration } 

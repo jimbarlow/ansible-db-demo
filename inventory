@@ -3,6 +3,7 @@ localhost ansible_connection=local
 [appnodes]
 192.168.144.158
 [dbnodes]
-192.168.144.157
-192.168.144.235
-192.168.144.195
+192.168.144.157 nodename=db1.lab.example.com
+192.168.144.204 nodename=db2.lab.example.com
+192.168.144.164 nodename=db3.lab.example.com
+

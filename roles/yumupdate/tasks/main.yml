@@ -1,8 +1,17 @@
 ---
+- name: hosts variables scanned
+  setup:
+
 - name: current repositories disabled
 #  hosts: "{{ inventory_hostname }}"
+  become: True
   shell: 
     subscription-manager repos --disable=*
+  when: ansible_distribution == "RedHat"
+
+- name: nodename set
+  hostname:
+    name: "{{ nodename }}"
 
 - name: proper depositories enabled
   become: True
@@ -11,6 +20,7 @@
   with_items:
     - rhel-7-server-rpms
     - rhel-7-server-extras-rpms
+  when: ansible_distribution == "RedHat"
 
 - name: upgrade all packages
 #  host: "{{ inventory_hostname }}"
@@ -19,6 +29,7 @@
     name: '*'
     state: latest
   ignore_errors: yes
+  register: updated
 
 - name: reboot if kernel is changed
   shell: sleep 2 && shutdown -r now "Rebooting from a playbook"
@@ -26,6 +37,7 @@
   poll: 0
   become: True
   ignore_errors: yes
+  when: updated.changed
 
 - name: waiting for a machine to complete reboot
   become: False
@@ -37,5 +49,8 @@
     timeout: 300
     port: 22
     search_regex: OpenSSH
+  when: updated.changed
+
 - name: declare success
   debug: msg="This thing worked!"
+  when: updated.changed  
