@@ -4,7 +4,7 @@
   vars:
     hosts_active: dbnodes
   hosts: "{{ hosts_active }}"
-  gather_facts: no
+  gather_facts: True
   become: True
   roles:
     - yumupdate   

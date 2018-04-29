@@ -1,0 +1,63 @@
+---
+- name: db node upgraded
+  vars:
+    node_to_upgrade: 192.168.144.159
+    new_maria_version: "10.2"
+  hosts: "{{ node_to_upgrade }}"
+  remote_user: devops
+  become: True
+  tasks:
+    - name: replication set to stopped to this node
+      lineinfile:
+        path: /etc/my.cnf.d/server.cnf
+        regexp: '^wsrep_provider'
+        line: wsrep_provider = "none"
+    - name: mysqld reloaded to remove node from replication 
+      service:
+        name: mariadb
+        state: restarted
+    - name: node shutdown
+      service:
+        name: mariadb
+        state: stopped
+    - name: remove old MariaDB server version
+      yum:
+        pkg: MariaDB-server
+        state: absent
+    - name: repository version for MariaDB updated
+      lineinfile:
+        path: /etc/yum.repos.d/mariadb.repo
+        regexp: '^baseurl = https://downloads.mariadb.com/MariaDB'
+        line: baseurl = https://downloads.mariadb.com/MariaDB/mariadb-{{ new_maria_version}}/yum/rhel/$releasever/$basearch
+    - name: New MariaDB-server installed
+      yum:
+        pkg: MariaDB-server
+        state: latest
+    - name: Client and Common MariaDB packages updated node updated
+      yum:
+        pkg: "*" 
+        state: latest
+    - name: Node started up out of cluster for mysql_upgrade process
+      service:
+        name: mariadb
+        state: started
+    - name: mysql_upgrade performed
+      command: mysql_upgrade
+    - name: node prepared to rejoin cluster
+      copy:
+        remote_src: yes
+        src: /etc/my.cnf.d/server.cnf.rpmsave
+        dest: /etc/my.cnf.d/server.cnf
+    - name: node set to active for joining
+      lineinfile:
+        path: /etc/my.cnf.d/server.cnf
+        regexp:  '^wsrep_provider'
+        line: wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+    - name: node restarted and rejoined to cluster
+      service:
+        name: mariadb
+        state: restarted
+
+# wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+         
+  
