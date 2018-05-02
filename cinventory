@@ -6,4 +6,6 @@ localhost ansible_connection=local
 192.168.144.142 nodename=db1.lab.example.com
 192.168.144.159 nodename=db2.lab.example.com
 192.168.144.252 nodename=db3.lab.example.com
+[haproxy]
+192.168.144.157 nodename=haproxy.lab.example.com
 

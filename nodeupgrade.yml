@@ -1,11 +1,14 @@
 ---
 - name: db node upgraded
   vars:
-    node_to_upgrade: 192.168.144.159
+    node_to_upgrade: 
+      - 192.168.144.252
+      - 192.168.144.142
     new_maria_version: "10.2"
   hosts: "{{ node_to_upgrade }}"
   remote_user: devops
   become: True
+  serial: 1
   tasks:
     - name: replication set to stopped to this node
       lineinfile:
@@ -58,6 +61,5 @@
         name: mariadb
         state: restarted
 
-# wsrep_provider=/usr/lib64/galera/libgalera_smm.so
          
   

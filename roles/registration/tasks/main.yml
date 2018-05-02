@@ -1,3 +1,4 @@
+# vim ft=ansible
 ---
 - name: subscribe the host to rhn
   hosts: "{{ inventory_host }}"  
@@ -6,3 +7,4 @@
     username: "{{ rhn_username }}"
     password: "{{ rhn_password }}"
     pool_ids: "{{ pool_id }}"
+  when: ansible_distribution == "RedHat"
