@@ -1,0 +1,8 @@
+---
+- name: node removed from the load balancer
+  vars:
+    node_to_remove: 192.168.144.23
+    load_balancer_host: 192.168.144.20
+  hosts: "{{ node_to_remove }}"
+  tasks:
+    - haproxy

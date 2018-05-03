@@ -17,7 +17,7 @@
     - debug: var=version_result.stdout
     - fail:
         msg: "The upgrade cannot be run unless the starting version is 10.1"
-      when: 10.1 not in version_result.stdout
+      when: '"10.1" not in version_result.stdout'
 
 
     - name: replication set to stopped to this node
@@ -67,6 +67,7 @@
 
     - name: node prepared to rejoin cluster by restoring db config
       copy:
+
         remote_src: yes
         src: /etc/my.cnf.d/server.cnf.rpmsave
         dest: /etc/my.cnf.d/server.cnf
