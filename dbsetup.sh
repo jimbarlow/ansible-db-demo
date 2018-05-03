@@ -3,4 +3,5 @@ mysql -u root -e 'CREATE TABLE NASA.persons ( id int, LastName varchar(55), Firs
 mysql -u root -e "CREATE USER 'haproxy'@'localhost';"
 mysql -u root -e "CREATE USER 'haproxy'@'haproxy.lab.example.com';"
 mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'haproxy'@'haproxy.lab.example.com';"
+mysql -u root -e "FLUSH PRIVILEGES;"
 
