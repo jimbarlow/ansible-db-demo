@@ -2,60 +2,77 @@
 - name: db node upgraded
   vars:
     node_to_upgrade: 
-      - 192.168.144.252
-      - 192.168.144.142
+      - 192.168.144.22
+      - 192.168.144.21
     new_maria_version: "10.2"
   hosts: "{{ node_to_upgrade }}"
   remote_user: devops
   become: True
   serial: 1
   tasks:
+    - name: show node mysql version
+      command: mysql -V
+      register: version_result
+
+    - debug: var=version_result.stdout
+
     - name: replication set to stopped to this node
       lineinfile:
         path: /etc/my.cnf.d/server.cnf
         regexp: '^wsrep_provider'
         line: wsrep_provider = "none"
+
     - name: mysqld reloaded to remove node from replication 
       service:
         name: mariadb
         state: restarted
+
     - name: node shutdown
       service:
         name: mariadb
         state: stopped
-    - name: remove old MariaDB server version
+
+    - name: remove old MariaDB server packages
       yum:
         pkg: MariaDB-server
         state: absent
+
     - name: repository version for MariaDB updated
       lineinfile:
         path: /etc/yum.repos.d/mariadb.repo
         regexp: '^baseurl = https://downloads.mariadb.com/MariaDB'
         line: baseurl = https://downloads.mariadb.com/MariaDB/mariadb-{{ new_maria_version}}/yum/rhel/$releasever/$basearch
-    - name: New MariaDB-server installed
+
+    - name: New MariaDB-server packages installed
       yum:
         pkg: MariaDB-server
         state: latest
+
     - name: Client and Common MariaDB packages updated node updated
       yum:
         pkg: "*" 
         state: latest
+
     - name: Node started up out of cluster for mysql_upgrade process
       service:
         name: mariadb
         state: started
+
     - name: mysql_upgrade performed
       command: mysql_upgrade
-    - name: node prepared to rejoin cluster
+
+    - name: node prepared to rejoin cluster by restoring db config
       copy:
         remote_src: yes
         src: /etc/my.cnf.d/server.cnf.rpmsave
         dest: /etc/my.cnf.d/server.cnf
-    - name: node set to active for joining
+
+    - name: node set to active replication settings
       lineinfile:
         path: /etc/my.cnf.d/server.cnf
         regexp:  '^wsrep_provider'
         line: wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+
     - name: node restarted and rejoined to cluster
       service:
         name: mariadb
