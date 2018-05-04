@@ -16,7 +16,8 @@
       register: version_result
 
     - debug: var=version_result.stdout
-    - fail:
+    - name: if we do not have the right version, do not proceed
+      fail:
         msg: "The upgrade cannot be run unless the starting version is 10.1"
       when: '"10.1" not in version_result.stdout'
 
@@ -37,7 +38,7 @@
         name: mariadb
         state: stopped
 
-    - name: remove old MariaDB server packages
+    - name: remove old MariaDB server package
       yum:
         pkg: MariaDB-server
         state: absent
@@ -83,5 +84,10 @@
         name: mariadb
         state: restarted
 
-         
+    - name: list out upgraded version
+      command: mysql -V
+      register: version_result
+
+    - debug: var=version_result.stdout
+           
   
