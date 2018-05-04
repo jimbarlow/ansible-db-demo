@@ -3,6 +3,13 @@
   vars:
     node_to_remove: 192.168.144.23
     load_balancer_host: 192.168.144.20
+  remote_user: devops
+  become: true
   hosts: "{{ node_to_remove }}"
   tasks:
-    - haproxy
+    - haproxy:
+        state: disabled
+        host: "{{ inventory_hostname }}"
+        backend: mariadb_galera
+      delegate_to: "{{ load_balancer_host }}"
+      
