@@ -11,4 +11,3 @@
       yum:
         pkg: haproxy
         state: latest
-

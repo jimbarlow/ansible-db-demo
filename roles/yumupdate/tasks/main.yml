@@ -31,13 +31,28 @@
   ignore_errors: yes
   register: updated
 
+# - name: Check if reboot is necessary.
+#   command: needs-restarting -r
+#   register: reboot_check
+#   changed_when: false
+#   failed_when: reboot_check.rc > 1
+
+- name: Check for reboot hint
+  become: true
+  shell: LAST_KERNEL=$(rpm -q --last kernel | perl -pe 's/^kernel-(\S+).*/$1/' | head -1);CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
+  ignore_errors: true
+  register: reboot_hint
+
+- name: reboot hint was {{ debug: var=reboot_hint }}
+
 - name: reboot if kernel is changed
   shell: sleep 2 && shutdown -r now "Rebooting from a playbook"
   async: 1
   poll: 0
   become: True
   ignore_errors: yes
-  when: updated.changed
+#  when: updated.changed  
+  when: reboot_hint.stdout.find("reboot") != -1
 
 - name: waiting for a machine to complete reboot
   become: False
@@ -49,7 +64,8 @@
     timeout: 300
     port: 22
     search_regex: OpenSSH
-  when: updated.changed
+  # when: updated.changed
+  when: reboot_hint.stdout.find("reboot") != -1
 
 - name: declare success
   debug: msg="This thing worked!"
