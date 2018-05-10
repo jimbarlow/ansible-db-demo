@@ -2,7 +2,7 @@
 ---
 - name: deploy HAProxy
   vars:
-    proxyhost: 192.168.144.20
+    proxyhost: 192.168.144.30
   hosts: "{{ proxyhost }}"
   remote_user: devops
   become: True
