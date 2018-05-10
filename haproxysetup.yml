@@ -6,8 +6,4 @@
   hosts: "{{ proxyhost }}"
   remote_user: devops
   become: True
-  tasks:
-    - name: install package
-      yum:
-        pkg: haproxy
-        state: latest
+    - role: haproxysetup.yml

@@ -1,0 +1,5 @@
+tasks:
+  - name: install package
+    yum:
+      pkg: haproxy
+      state: latest
