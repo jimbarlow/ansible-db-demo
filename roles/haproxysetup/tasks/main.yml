@@ -3,3 +3,9 @@ tasks:
     yum:
       pkg: haproxy
       state: latest
+  - name: install socat
+    yum:
+      pkg: socat
+      state: latest
+
+   

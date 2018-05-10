@@ -1,15 +1,18 @@
----
-- name: node removed from the load balancer
+- name: remove load from loadbalancer
+  hosts: "{{ active_host }}"
   vars:
-    node_to_remove: 192.168.144.23
-    load_balancer_host: 192.168.144.20
-  remote_user: devops
-  become: true
-  hosts: "{{ node_to_remove }}"
+    # active_host: db1.lab.example.com
   tasks:
     - haproxy:
         state: disabled
-        host: "{{ inventory_hostname }}"
+        host: '{{ inventory_hostname }}'
+        # host: db1.lab.example.com
+        socket: /var/lib/haproxy/stats
         backend: mariadb_galera
-      delegate_to: "{{ load_balancer_host }}"
-      
+        wait: yes
+#        drain: yes
+        wait_interval: 1
+        wait_retries: 60
+#        shutdown_sessions: true
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups.haproxy }}"
