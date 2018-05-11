@@ -2,9 +2,10 @@
 ---
 - name: deploy HAProxy
   vars:
-    proxyhost: 192.168.144.30
+    proxyhost: haproxy2.lab.example.com
   hosts: "{{ proxyhost }}"
   remote_user: devops
   become: True
-    - role: yumupdate
-    - role: haproxysetup
+  roles:
+    - yumupdate
+    - haproxysetup
