@@ -28,10 +28,10 @@ global
     chroot      /var/lib/haproxy
     pidfile     /var/run/haproxy.pid
     maxconn     4000
- #    user        haproxy
- #    group       haproxy
-    user        root
-    group       root
+    user        haproxy
+    group       haproxy
+#    user        root
+#    group       root
     daemon
 
     # turn on stats unix socket
@@ -59,7 +59,7 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-listen  stats   {{ ansible_all_ipv4_addresses.[0] }}:1936
+listen  stats          {{ ansible_all_ipv4_addresses[0] }}:1936
         mode            http
         log             global
 
@@ -87,20 +87,8 @@ listen  stats   {{ ansible_all_ipv4_addresses.[0] }}:1936
 #     default_backend             app
 # 
 
-# Load Balancing for Galera Cluster
-# listen galera 192.168.144.157:3306
-#      balance source
-#      mode tcp
-#      option tcpka
-#      option mysql-check user haproxy
-#      server db1 192.168.1.142:3306 check weight 1
-#      server db2 192.168.1.159:3306 check weight 1
-#      server db3 192.168.1.252:3306 check weight 1
-
-
-
 frontend mariadb
-	bind {{ ansible_all_ipv4_addresses.[0] }}:3306
+	bind {{ ansible_all_ipv4_addresses[0] }}:3306
 	mode tcp
 	default_backend mariadb_galera
 
@@ -108,7 +96,7 @@ backend mariadb_galera
 	balance roundrobin
 #	balance source
 	mode tcp
-        option mysql-check user haproxy
+#        option mysql-check user haproxy
 	option tcpka
 	server db1.lab.example.com 192.168.144.21:3306 check weight 1
         server db2.lab.example.com 192.168.144.22:3306 check weight 1
