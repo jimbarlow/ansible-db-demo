@@ -7,5 +7,14 @@ tasks:
     yum:
       pkg: socat
       state: latest
+  - name: install the config files
+    template: 
+      src: templates/haproxy.cfg.j2
+      dest: /etc/haproxy/haproxy.cfg
+  - name: start the haproxy service
+    service:
+      name: haproxy
+      state: started
+      enabled: true
 
    
