@@ -7,4 +7,4 @@ db3.lab.example.com nodename=db3.lab.example.com
 [idm]
 ipa.lab.example.com nodename=ipa.lab.example.com
 [haproxy]
-haproxy.lab.example.com nodename=haproxy.lab.example.com
+haproxy2.lab.example.com nodename=haproxy2.lab.example.com
