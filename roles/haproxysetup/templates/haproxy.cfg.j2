@@ -96,7 +96,7 @@ backend mariadb_galera
 	balance roundrobin
 #	balance source
 	mode tcp
-#        option mysql-check user haproxy
+        option mysql-check user haproxy
 	option tcpka
 	server db1.lab.example.com 192.168.144.21:3306 check weight 1
         server db2.lab.example.com 192.168.144.22:3306 check weight 1

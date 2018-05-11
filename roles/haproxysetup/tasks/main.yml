@@ -6,6 +6,8 @@
     yum:
       pkg: socat
       state: latest
+  - command: setenforce 0
+    become: true
   - name: install the config files
     template: 
       src: templates/haproxy.cfg.j2
