@@ -6,4 +6,5 @@
   hosts: "{{ proxyhost }}"
   remote_user: devops
   become: True
-    - role: haproxysetup.yml
+    - role: yumupdate
+    - role: haproxysetup

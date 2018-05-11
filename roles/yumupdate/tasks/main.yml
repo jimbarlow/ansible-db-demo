@@ -3,7 +3,6 @@
   setup:
 
 - name: current repositories disabled
-#  hosts: "{{ inventory_hostname }}"
   become: True
   shell: 
     subscription-manager repos --disable=*
@@ -11,7 +10,7 @@
 
 - name: nodename set
   hostname:
-    name: "{{ nodename }}"
+    name: "{{ inventory_hostname }}"
 
 - name: proper depositories enabled
   become: True
@@ -51,7 +50,7 @@
   poll: 0
   become: True
   ignore_errors: yes
-#  when: updated.changed  
+  #  when: updated.changed  
   when: reboot_hint.stdout.find("reboot") != -1
 
 - name: waiting for a machine to complete reboot
