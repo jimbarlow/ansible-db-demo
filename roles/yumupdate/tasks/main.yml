@@ -2,17 +2,18 @@
 - name: hosts variables scanned
   setup:
 
+- name: nodename set
+  hostname:
+    name: "{{ inventory_hostname }}"
+
 - name: current repositories disabled
   become: True
   shell: 
     subscription-manager repos --disable=*
   when: ansible_distribution == "RedHat"
 
-- name: nodename set
-  hostname:
-    name: "{{ inventory_hostname }}"
 
-- name: proper depositories enabled
+- name: proper repositories enabled
   become: True
   shell:
     subscription-manager repos --enable={{ item }}
