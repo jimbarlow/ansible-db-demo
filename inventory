@@ -1,9 +1,9 @@
 [local]
 localhost ansible_connection=local
 [dbnodes]
-db1.lab.example.com nodename=db1.lab.example.com
-db2.lab.example.com nodename=db2.lab.example.com
-db3.lab.example.com nodename=db3.lab.example.com
+db1.lab.example.com nodename=db1
+db2.lab.example.com nodename=db2
+db3.lab.example.com nodename=db3
 [idm]
 ipa.lab.example.com nodename=ipa.lab.example.com
 [haproxy]

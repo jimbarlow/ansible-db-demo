@@ -1,11 +1,15 @@
-  - name: install package
+  - name: get facts from dbnodes for the template
+    setup:
+    delegate_to: "{{item}}"
+    delegate_facts: True
+    with_items: "{{ groups['dbnodes'] }}"
+  - name: install packages
     yum:
-      pkg: haproxy
+      pkg: "{{ item }}"
       state: latest
-  - name: install socat
-    yum:
-      pkg: socat
-      state: latest
+    with_items:
+      - haproxy
+      - socat
   - command: setenforce 0
     become: true
   - name: install the config files
