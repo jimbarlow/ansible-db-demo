@@ -98,6 +98,6 @@ backend mariadb_galera
 	mode tcp
         option mysql-check user haproxy
 	option tcpka
-	server db1.lab.example.com {{ hostvars[db1.lab.example.com]['ansible_default_ipv4']['address'] }}:3306 check weight 1
+	server db1.lab.example.com {{ hostvars['db1.lab.example.com']['ansible_default_ipv4']['address'] }}:3306 check weight 1
         server db2.lab.example.com 192.168.144.22:3306 check weight 1
         server db3.lab.example.com 192.168.144.23:3306 check weight 1
