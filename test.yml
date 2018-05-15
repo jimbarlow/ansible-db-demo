@@ -2,7 +2,7 @@
 - name: Create Azure VM
   hosts: localhost
   connection: local
-  var:
+  vars:
     jims_vm_name: jims2
   tasks:
   - name: Create VM
