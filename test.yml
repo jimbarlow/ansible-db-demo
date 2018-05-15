@@ -1,0 +1,20 @@
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create VM
+    azure_rm_virtualmachine:
+      resource_group: Tower
+      name: JimsTest
+      vm_size: Standard_DS1_v2
+      admin_username: devops
+      ssh_password_enabled: false
+      ssh_public_keys: 
+        - path: /home/devops/.ssh/authorized_keys
+          key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8LXOSFEl7oCL8yz79LptzMBvHQQA3rlS9efejThAytOzK/ka8PukQ+XPw3y21iMQZrGYVJdv7M3IB+m6qK2uvV18xrpMRerl2/LBq3aLJRkPNtJYWq/duT7G/nj/MA8ptmczcYfS3INde1SvC5cBP+plM2Bwn5zeF9BjftC0XgP2+NrbCYOT7uO4C3H2+c3khxYhRHMZd5/xGD2TGghPYpNjKfDuYslkI9j0Ekkl+z44Mlcztd2TcfKrBLcPUqKViz9I0QePPbBiT3swYdl5prOWdBTysaoAuUpuXR6EET0eJm5/N22x1u1aKxvXbsWYWxsaR3p5+SnTWyhli+OdJ jbarlow@jbarlow.redhat.com"
+      image:
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.3'
+        version: latest
