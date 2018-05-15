@@ -2,11 +2,12 @@
 - name: Create Azure VM
   hosts: localhost
   connection: local
+  jims_vm_name: jims2
   tasks:
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: Tower
-      name: JimsTest
+      name: "{{ jims_vm_name }}"
       vm_size: Standard_DS1_v2
       admin_username: devops
       ssh_password_enabled: false
