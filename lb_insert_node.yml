@@ -1,7 +1,9 @@
 - name: insert load to loadbalancer
   vars:
     active_host: db2.lab.example.com
-  hosts: "{{ active_host }}"
+  hosts: "{{ node_to_upgrade }}"
+  remote_user: devops
+  become: True
   tasks:
     - haproxy:
         state: enabled
