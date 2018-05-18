@@ -1,7 +1,7 @@
 - name: insert load to loadbalancer
-  hosts: "{{ active_host }}"
   vars:
-    # active_host: db1.lab.example.com
+    active_host: db2.lab.example.com
+  hosts: "{{ active_host }}"
   tasks:
     - haproxy:
         state: enabled
