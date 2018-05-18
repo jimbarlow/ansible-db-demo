@@ -5,7 +5,7 @@ read -p "Press any key to perform datbase inserts" -n 1 -s
 mysql -u haproxy --host=192.168.144.20 -e 'insert into NASA.persons ( id, LastName, FirstName, City, State) values (1, "Kraft", "Christopher", "Houston", "TX");'
 echo""
 read -p "Press any key to continue inserts" -n 1 -s
-mysql -u haproxy --host=192.168.144.20 -e 'insert into NASA.persons ( id, LastName, FirstName, City, State) values (2, "Cernan", "Eugene", "Houston", "TX");'
+mysql -u haproxy --host=192.168.144.20 -e 'insert into NASA.persons ( id, LastName, FirstName, City, State) values (2, "Lunney", "Glynn", "Houston", "TX");'
 echo""
 read -p "Press any key to continue inserts" -n 1 -s
 mysql -u haproxy --host=192.168.144.20 -e 'insert into NASA.persons ( id, LastName, FirstName, City, State) values (3, "Krantz", "Eugene", "Houston", "TX");'
