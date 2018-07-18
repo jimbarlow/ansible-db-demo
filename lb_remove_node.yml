@@ -4,6 +4,7 @@
   hosts: "{{ node_to_upgrade }}"
   remote_user: devops
   become: True
+  serial: 1
   tasks:
     - haproxy:
         state: disabled
